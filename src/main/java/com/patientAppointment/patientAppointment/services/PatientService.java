@@ -1,0 +1,69 @@
+package com.patientAppointment.patientAppointment.services;
+
+import com.patientAppointment.patientAppointment.dtos.AppointmentDtoRequest;
+import com.patientAppointment.patientAppointment.dtos.AppointmentDtoResponse;
+import com.patientAppointment.patientAppointment.models.Appointment;
+import com.patientAppointment.patientAppointment.repositories.AppointmentRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class PatientService {
+
+    private final AppointmentRepository appointmentRepository;
+
+    PatientService(AppointmentRepository appointmentRepository){
+        this.appointmentRepository = appointmentRepository;
+    }
+
+    public List<AppointmentDtoResponse> getAllPatients() {
+        // Logic to get all patients
+        return this.appointmentRepository.findAll()
+                .stream()
+                .map(this::convertToPatientDto)
+                .toList();
+    }
+
+    public AppointmentDtoResponse createPatient(AppointmentDtoRequest patientDetails) {
+        // Logic to create a new patient
+        Appointment savedAppointment = this.appointmentRepository.save(this.convertToAppointment(patientDetails));
+        return  this.convertToPatientDto(savedAppointment);
+    }
+
+    public Boolean deleteAllPatient() {
+        // Logic to delete all patients
+        return true; // Placeholder return statement
+    }
+
+    public AppointmentDtoRequest updatePatient(Long id, AppointmentDtoRequest patientDetails) {
+        // Logic to update a patient
+        return null; // Placeholder return statement
+    }
+
+
+    private Appointment convertToAppointment(AppointmentDtoRequest patientDetails) {
+        Appointment appointment = new Appointment();
+        // Map fields from patientDetails to appointment
+        appointment.setFirstName(patientDetails.getFirstName());
+        appointment.setLastName(patientDetails.getLastName());
+        appointment.setStatus(patientDetails.getStatus());
+        appointment.setDateTime(patientDetails.getDateTime());
+        appointment.setPhoneNo(patientDetails.getPhoneNo());
+
+        return appointment;
+    }
+
+    private AppointmentDtoResponse convertToPatientDto(Appointment appointment) {
+        AppointmentDtoResponse patientDtoResponse = new AppointmentDtoResponse();
+        // Map fields from appointment to patientDto
+        patientDtoResponse.setId(appointment.getId());
+        patientDtoResponse.setFirstName(appointment.getFirstName());
+        patientDtoResponse.setLastName(appointment.getLastName());
+        patientDtoResponse.setStatus(appointment.getStatus());
+        patientDtoResponse.setPhoneNo(appointment.getPhoneNo());
+        patientDtoResponse.setDateTime(appointment.getDateTime());
+        return patientDtoResponse;
+    }
+
+}
