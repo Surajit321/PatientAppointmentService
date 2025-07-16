@@ -5,6 +5,7 @@ import com.patientAppointment.patientAppointment.dtos.AppointmentDtoResponse;
 import com.patientAppointment.patientAppointment.models.Appointment;
 import com.patientAppointment.patientAppointment.repositories.AppointmentRepository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class PatientService {
         // Logic to create a new patient
         Appointment savedAppointment = this.appointmentRepository.save(this.convertToAppointment(patientDetails));
         AppointmentDtoResponse appointmentDtoResponse =  this.convertToPatientDto(savedAppointment);
-        this.webSocketService.sendMessage(appointmentDtoResponse);
+        this.webSocketService.sendMessage("patientCreated", appointmentDtoResponse);
         return appointmentDtoResponse;
     }
 
@@ -42,9 +43,22 @@ public class PatientService {
         return true; // Placeholder return statement
     }
 
-    public AppointmentDtoRequest updatePatient(Long id, AppointmentDtoRequest patientDetails) {
+    @Transactional
+    public void updatePatient(Long id, AppointmentDtoRequest patientDetails) {
         // Logic to update a patient
-        return null; // Placeholder return statement
+        String currentStatus = patientDetails.getStatus();
+        if(currentStatus.equals("Booked")){
+            currentStatus = "Open";
+            this.appointmentRepository.updateStatusById(id, currentStatus);
+            patientDetails.setStatus(currentStatus);
+            AppointmentDtoResponse appointmentDtoResponse = convertToPatientDto(convertToAppointment(patientDetails));
+            appointmentDtoResponse.setId(id);
+            this.webSocketService.sendMessage("patientUpdated", appointmentDtoResponse);
+        }else {
+            this.appointmentRepository.deleteById(id);
+            this.webSocketService.sendDeleteMessage("patientDeleted", id);
+        }
+        // Placeholder return statement
     }
 
 

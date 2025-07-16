@@ -32,8 +32,8 @@ public class AppointmentController {
     }
 
     @PutMapping("/patients/{id}")
-    public AppointmentDtoRequest updatePatient(@PathVariable("id") Long id, @RequestBody AppointmentDtoRequest patientDetails) {
-        return this.patientService.updatePatient(id, patientDetails);
+    public void updatePatient(@PathVariable("id") Long id, @RequestBody AppointmentDtoRequest patientDetails) {
+        this.patientService.updatePatient(id, patientDetails);
     }
 
 
