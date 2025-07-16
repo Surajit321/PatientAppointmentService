@@ -4,6 +4,7 @@ import com.patientAppointment.patientAppointment.dtos.AppointmentDtoRequest;
 import com.patientAppointment.patientAppointment.dtos.AppointmentDtoResponse;
 import com.patientAppointment.patientAppointment.models.Appointment;
 import com.patientAppointment.patientAppointment.repositories.AppointmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,11 @@ public class PatientService {
 
     private final AppointmentRepository appointmentRepository;
 
-    PatientService(AppointmentRepository appointmentRepository){
+    private final WebSocketService webSocketService;
+
+    PatientService(AppointmentRepository appointmentRepository, WebSocketService webSocketService){
         this.appointmentRepository = appointmentRepository;
+        this.webSocketService = webSocketService;
     }
 
     public List<AppointmentDtoResponse> getAllPatients() {
@@ -28,7 +32,9 @@ public class PatientService {
     public AppointmentDtoResponse createPatient(AppointmentDtoRequest patientDetails) {
         // Logic to create a new patient
         Appointment savedAppointment = this.appointmentRepository.save(this.convertToAppointment(patientDetails));
-        return  this.convertToPatientDto(savedAppointment);
+        AppointmentDtoResponse appointmentDtoResponse =  this.convertToPatientDto(savedAppointment);
+        this.webSocketService.sendMessage(appointmentDtoResponse);
+        return appointmentDtoResponse;
     }
 
     public Boolean deleteAllPatient() {
