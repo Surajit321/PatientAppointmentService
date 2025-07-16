@@ -4,7 +4,7 @@ import com.patientAppointment.patientAppointment.dtos.AppointmentDtoRequest;
 import com.patientAppointment.patientAppointment.dtos.AppointmentDtoResponse;
 import com.patientAppointment.patientAppointment.models.Appointment;
 import com.patientAppointment.patientAppointment.repositories.AppointmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
