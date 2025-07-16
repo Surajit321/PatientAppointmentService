@@ -47,18 +47,17 @@ public class PatientService {
     public void updatePatient(Long id, AppointmentDtoRequest patientDetails) {
         // Logic to update a patient
         String currentStatus = patientDetails.getStatus();
-        if(currentStatus.equals("Booked")){
+        if (currentStatus.equals("Booked")) {
             currentStatus = "Open";
             this.appointmentRepository.updateStatusById(id, currentStatus);
             patientDetails.setStatus(currentStatus);
             AppointmentDtoResponse appointmentDtoResponse = convertToPatientDto(convertToAppointment(patientDetails));
             appointmentDtoResponse.setId(id);
             this.webSocketService.sendMessage("patientUpdated", appointmentDtoResponse);
-        }else {
+        } else {
             this.appointmentRepository.deleteById(id);
             this.webSocketService.sendDeleteMessage("patientDeleted", id);
         }
-        // Placeholder return statement
     }
 
 
