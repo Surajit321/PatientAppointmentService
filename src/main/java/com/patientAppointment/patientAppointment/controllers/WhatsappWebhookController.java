@@ -23,7 +23,7 @@ import java.util.HashMap;
 @RequestMapping("/webhook")
 public class WhatsappWebhookController {
     private final String PHONE_NUMBER_ID = "646658418541683";
-    private final String ACCESS_TOKEN = "EAAQPNnAl6IsBPAO3nlq13kmrEtuumCYbgG8Lr644JewWNhLp9rJspPnt6EwkGZBgFzxeQYeSISssX93RGkwUY8PP4RhVrKfPx0uZALHGcGSzWXGDmK5wLuZBsFmPMsOWFBdXwuzqDyYwPwdjOUJSqQYnSZC4fWqnntjRmDgFYYNBZBrUxksj6FgjLbqD0JJMOQdENXj9lghHZAfyI8QQyr1yPYPgZAZCmClbo2ccbQGcygZDZD";
+    private final String ACCESS_TOKEN = "EAAQPNnAl6IsBPLxi06022s28KZBfRI8ZCDjlyHzSXSXfwraDnbbiqZAvGY4HkkW1IUPLie6mLJkxGUOOMVrSRyUqrtOllyMn3uultaHs421v3nZAbFPtPkdID00NLNZCPZCHZCtR4X8vPKmeVFfrEzPqrtZBJxVmJTSzWMEP8nx51YXV5hXq3MGqJxGSoa9MrEM3CEu9K1zgZCjleimjAW3dZAJNk9Eei7TebZBAJRaxdaIIgZDZD";
 
     private final Map<String, WhatsappWebhookSession> sessions = new HashMap<>();
 
