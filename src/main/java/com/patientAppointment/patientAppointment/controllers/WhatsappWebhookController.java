@@ -4,17 +4,10 @@ import com.patientAppointment.patientAppointment.dtos.AppointmentDtoRequest;
 import com.patientAppointment.patientAppointment.dtos.WhatsappWebhookDto;
 import com.patientAppointment.patientAppointment.dtos.WhatsappWebhookSession;
 import com.patientAppointment.patientAppointment.services.PatientService;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,6 +24,19 @@ public class WhatsappWebhookController {
 
     WhatsappWebhookController(PatientService patientService) {
         this.patientService = patientService;
+    }
+
+    @GetMapping("/webhook")
+    public ResponseEntity<String> verifyWebhook(
+            @RequestParam("hub.mode") String mode,
+            @RequestParam("hub.verify_token") String verifyToken,
+            @RequestParam("hub.challenge") String challenge) {
+
+        if ("subscribe".equals(mode) && "my-whatsapp-bot-secret-token".equals(verifyToken)) {
+            return ResponseEntity.ok(challenge);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid token");
+        }
     }
 
     @PostMapping
