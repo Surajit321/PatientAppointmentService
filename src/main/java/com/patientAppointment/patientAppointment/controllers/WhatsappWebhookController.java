@@ -26,7 +26,7 @@ public class WhatsappWebhookController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/webhook")
+    @GetMapping
     public ResponseEntity<String> verifyWebhook(
             @RequestParam("hub.mode") String mode,
             @RequestParam("hub.verify_token") String verifyToken,
